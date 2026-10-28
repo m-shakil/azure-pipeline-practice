@@ -23,7 +23,7 @@ stages:
       displayName: 'Create a text file with text'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(Pipeline.Workspace)'
+        targetPath: '$(System.DefaultWorkingDirectory)'
         artifact: 'Store text file'
 
     
