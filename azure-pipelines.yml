@@ -26,6 +26,6 @@ stages:
   - job: OpenTextFile
     displayName: 'OpenTextFile'
     steps:
-    - script: PublishPipelineArtifact@1
+    - script: |
         cat test.txt
       displayName: 'Show text file content'
