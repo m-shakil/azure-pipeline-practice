@@ -19,6 +19,7 @@ stages:
     - script: |
         echo Hello World! > test.txt
         pwd
+        ls -la
       displayName: 'Create a text file with text'
 
 - stage: ShowContent
@@ -28,5 +29,7 @@ stages:
     displayName: 'OpenTextFile'
     steps:
     - script: |
+        pwd
+        ls -la
         cat test.txt
       displayName: 'Show text file content'
