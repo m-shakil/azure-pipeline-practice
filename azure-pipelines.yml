@@ -16,35 +16,49 @@ variables:
   runThirdStep: true
   runFourthStep: false
 
-steps:
-- script: |
-    echo $(greetings)
-    echo First step completed
-  displayName: 'First step'
-  condition: eq(variables['runFirstStep'], 'true')
+stages:
+- stage: TestStage
+  displayName: 'Test stage' 
+  jobs:
+  - job: TestJob
+    displayName: 'Test job'
+    steps:
+    - script: |
+        echo $(greetings)
+        echo First step completed
+      displayName: 'First step'
+      condition: eq(variables['runFirstStep'], 'true')
 
-- script: |
-    echo 'Second step completed'
-  displayName: 'Second step'
-  condition: eq(variables['runSecondStep'], 'true')
+    - script: |
+        echo 'Second step completed'
+      displayName: 'Second step'
+      condition: eq(variables['runSecondStep'], 'true')
 
-- script: |
-    echo 'Third step completed'
-  displayName: 'Third step'
-  condition: and(succeeded(), eq(variables['runThirdStep'], 'true'))
+    - script: |
+        echo 'Third step completed'
+      displayName: 'Third step'
+      condition: and(succeeded(), eq(variables['runThirdStep'], 'true'))
 
-- script: |
-    echo 'Foruth step completed'
-  displayName: 'Fourth step'
-  condition: ne(variables['runFourthStep'], 'false')
+    - script: |
+        echo 'Foruth step completed'
+      displayName: 'Fourth step'
+      condition: ne(variables['runFourthStep'], 'false')
 
-- script: |
-    echo 'Final step completed'
-  displayName: 'Final step'
-  condition: always()
+    - script: |
+        echo 'Final step completed'
+      displayName: 'Final step'
+      condition: always()
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Build.SourcesDirectory)'
-    artifact: 'source-code'
-  displayName: 'Publish source code'
+- stage: DeployStage
+  displayName: 'Deploy stage'
+  dependsOn: TestStage
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy job'
+
+    steps:
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)'
+        artifact: 'source-code'
+      displayName: 'Publish source code'
