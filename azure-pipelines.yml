@@ -9,56 +9,23 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  greetings: 'Hi, Monjurul!' 
-  runFirstStep: false
-  runSecondStep: true
-  runThirdStep: true
-  runFourthStep: false
-
 stages:
-- stage: TestStage
-  displayName: 'Test stage' 
+- stage: CreateContent
+  displayName: 'Create Content' 
   jobs:
-  - job: TestJob
-    displayName: 'Test job'
+  - job: CreateTextFile
+    displayName: 'Create Text File'
     steps:
     - script: |
-        echo $(greetings)
-        echo First step completed
-      displayName: 'First step'
-      condition: eq(variables['runFirstStep'], 'true')
+        echo Hello World! > test.txt
+      displayName: 'Create a text file with text'
 
-    - script: |
-        echo 'Second step completed'
-      displayName: 'Second step'
-      condition: eq(variables['runSecondStep'], 'true')
-
-    - script: |
-        echo 'Third step completed'
-      displayName: 'Third step'
-      condition: and(succeeded(), eq(variables['runThirdStep'], 'true'))
-
-    - script: |
-        echo 'Foruth step completed'
-      displayName: 'Fourth step'
-      condition: ne(variables['runFourthStep'], 'false')
-
-    - script: |
-        echo 'Final step completed'
-      displayName: 'Final step'
-      condition: always()
-
-- stage: DeployStage
-  displayName: 'Deploy stage'
-  dependsOn: TestStage
+- stage: ShowContent
+  displayName: 'Show Content'
   jobs:
-  - job: DeployJob
-    displayName: 'Deploy job'
-
+  - job: OpenTextFile
+    displayName: 'OpenTextFile'
     steps:
-    - task: PublishPipelineArtifact@1
-      inputs:
-        targetPath: '$(Build.SourcesDirectory)'
-        artifact: 'source-code'
-      displayName: 'Publish source code'
+    - script: PublishPipelineArtifact@1
+        cat test.txt
+      displayName: 'Show text file content'
