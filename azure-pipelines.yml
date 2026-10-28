@@ -21,6 +21,12 @@ stages:
         pwd
         ls -la
       displayName: 'Create a text file with text'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'Store text file'
+
+    
 
 - stage: ShowContent
   displayName: 'Show Content'
@@ -31,5 +37,5 @@ stages:
     - script: |
         pwd
         ls -la
-        cat test.txt
+        cat '$(Pipeline.Workspace)/test.txt'
       displayName: 'Show text file content'
