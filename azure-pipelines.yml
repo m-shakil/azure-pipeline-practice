@@ -18,15 +18,11 @@ stages:
     steps:
     - script: |
         echo Hello World! > test.txt
-        pwd
-        ls -la
       displayName: 'Create a text file with text'
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '$(System.DefaultWorkingDirectory)'
-        artifact: 'Store text file'
-
-    
+        targetPath: '$(Build.SourcesDirectory)'
+        artifact: 'file'
 
 - stage: ShowContent
   displayName: 'Show Content'
@@ -34,8 +30,10 @@ stages:
   - job: OpenTextFile
     displayName: 'OpenTextFile'
     steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: file
+        path: $(Build.SourcesDirectory)
     - script: |
-        pwd
-        ls -la
-        cat '$(Pipeline.Workspace)/test.txt'
+        cat '$(Build.SourcesDirectory)/test.txt'
       displayName: 'Show text file content'
