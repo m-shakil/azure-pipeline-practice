@@ -18,6 +18,7 @@ stages:
     steps:
     - script: |
         echo Hello World! > test.txt
+        pwd
       displayName: 'Create a text file with text'
 
 - stage: ShowContent
