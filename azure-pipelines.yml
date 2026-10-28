@@ -11,10 +11,40 @@ pool:
 
 variables:
   greetings: 'Hi, Monjurul!' 
+  runFirstStep: false
+  runSecondStep: true
+  runThirdStep: true
+  runFourthStep: false
 
 steps:
 - script: |
     echo $(greetings)
-    echo 5 seconds later..
-    echo $(greetings)
-  displayName: 'Run multiline script'
+    echo First step completed
+  displayName: 'First step'
+  condition: eq(variables['runFirstStep'], 'true')
+
+- script: |
+    echo 'Second step completed'
+  displayName: 'Second step'
+  condition: eq(variables['runSecondStep'], 'true')
+
+- script: |
+    echo 'Third step completed'
+  displayName: 'Third step'
+  condition: and(succeeded(), eq(variables['runThirdStep'], 'true'))
+
+- script: |
+    echo 'Foruth step completed'
+  displayName: 'Fourth step'
+  condition: ne(variables['runFourthStep'], 'false')
+
+- script: |
+    echo 'Final step completed'
+  displayName: 'Final step'
+  condition: always()
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.SourcesDirectory)'
+    artifact: 'source-code'
+  displayName: 'Publish source code'
