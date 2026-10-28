@@ -14,6 +14,7 @@ variables:
 
 steps:
 - script: |
-    echo hi $(greetings)
-    echo bye $(greetings)
+    echo $(greetings)
+    echo 5 seconds later..
+    echo $(greetings)
   displayName: 'Run multiline script'
