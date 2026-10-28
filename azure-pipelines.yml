@@ -9,6 +9,9 @@ pr:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  fileName: 'test.txt'
+
 stages:
 - stage: CreateContent
   displayName: 'Create Content' 
@@ -17,7 +20,7 @@ stages:
     displayName: 'Create Text File'
     steps:
     - script: |
-        echo Hello World! > test.txt
+        echo Hello World! > $(fileName)
       displayName: 'Create a text file with text'
     - task: PublishPipelineArtifact@1
       inputs:
@@ -35,5 +38,5 @@ stages:
         artifact: file
         path: $(Build.SourcesDirectory)
     - script: |
-        cat '$(Build.SourcesDirectory)/test.txt'
+        cat '$(Build.SourcesDirectory)/$(fileName)'
       displayName: 'Show text file content'
