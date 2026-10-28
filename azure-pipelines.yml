@@ -1,5 +1,19 @@
+trigger:
+- main
+
+pr:
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  greetings: 'Hi, Monjurul!' 
+
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-- script: echo Hello, again!
-  displayName: 'Run a one-line script again'
+- script: |
+    echo hi $(greetings)
+    echo bye $(greetings)
+  displayName: 'Run multiline script'
